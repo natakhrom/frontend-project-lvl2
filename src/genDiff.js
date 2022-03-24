@@ -6,12 +6,12 @@ const getDiffObjProperty = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const arrKeys = keys1.concat(keys2);
-  const sortKeys = _.sortBy(arrKeys);
-  const sortUniqKeys = _.sortedUniq(sortKeys);
+  const arrSortKeys = _.sortBy(arrKeys);
+  const arrSortUnicKeys = _.sortedUniq(arrSortKeys);
   let str = '';
 
-  sortUniqKeys.forEach((key) => {
-    if (Object.hasOwn(obj1, key) && Object.hasOwn(obj2, key)) {
+  arrSortUnicKeys.forEach((key) => {
+    if (key in obj1 && key in obj2) {
       if (obj1[key] === obj2[key]) {
         str += `  ${key}: ${obj1[key]}\n`;
       } else {
