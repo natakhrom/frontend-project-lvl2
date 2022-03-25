@@ -2,7 +2,12 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
 
-const getDiffObjProperty = (obj1, obj2) => {
+function genDiff(filepath1, filepath2) {
+  const path1 = path.resolve('__fixtures__', filepath1);
+  const path2 = path.resolve('__fixtures__', filepath2);
+  const obj1 = JSON.parse(readFileSync(path1, 'utf-8'));
+  const obj2 = JSON.parse(readFileSync(path2, 'utf-8'));
+
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const arrKeys = keys1.concat(keys2);
@@ -25,17 +30,9 @@ const getDiffObjProperty = (obj1, obj2) => {
     }
   });
 
-  return `{\n${str}\n}`;
-};
-
-function genDiff(filepath1, filepath2) {
-  const data1 = readFileSync(path.resolve('__fixtures__', filepath1), 'utf-8');
-  const data2 = readFileSync(path.resolve('__fixtures__', filepath2), 'utf-8');
-  const obj1 = JSON.parse(data1);
-  const obj2 = JSON.parse(data2);
-
-  const strDiff = getDiffObjProperty(obj1, obj2);
-  console.log(strDiff);
+  console.log(`{\n${str}}`);
+  return `{\n${str}}`;
 }
 
+genDiff('file1.json', 'file2.json');
 export default genDiff;
