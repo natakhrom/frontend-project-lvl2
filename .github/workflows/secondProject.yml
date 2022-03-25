@@ -23,7 +23,8 @@ jobs:
       - name: Run Linter
         run: make lint
 
-      - name: secondProject-check
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3
         with: # Set the secret as an input
           super_secret: ${{ secrets.STUDENT_ID }}
         env: # Or as an environment variable

@@ -34,5 +34,4 @@ function genDiff(filepath1, filepath2) {
   return `{\n${str}}`;
 }
 
-genDiff('file1.json', 'file2.json');
 export default genDiff;
