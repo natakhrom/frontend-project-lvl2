@@ -3,16 +3,13 @@ import path from 'path';
 import _ from 'lodash';
 
 function genDiff(filepath1, filepath2) {
-  const path1 = path.resolve('__fixtures__', filepath1);
-  const path2 = path.resolve('__fixtures__', filepath2);
-  const obj1 = JSON.parse(readFileSync(path1, 'utf-8'));
-  const obj2 = JSON.parse(readFileSync(path2, 'utf-8'));
+  const obj1 = JSON.parse(readFileSync(path.resolve('__fixtures__', filepath1), 'utf-8'));
+  const obj2 = JSON.parse(readFileSync(path.resolve('__fixtures__', filepath2), 'utf-8'));
 
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const arrKeys = keys1.concat(keys2);
-  const arrSortKeys = _.sortBy(arrKeys);
-  const arrSortUnicKeys = _.sortedUniq(arrSortKeys);
+  const arrSortUnicKeys = _.sortedUniq(_.sortBy(arrKeys));
   let str = '';
 
   arrSortUnicKeys.forEach((key) => {
