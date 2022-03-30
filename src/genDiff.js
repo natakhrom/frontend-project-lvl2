@@ -1,10 +1,11 @@
 import { readFileSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
+import parser from './parsers.js';
 
 function genDiff(filepath1, filepath2) {
-  const obj1 = JSON.parse(readFileSync(path.resolve('__fixtures__', filepath1), 'utf-8'));
-  const obj2 = JSON.parse(readFileSync(path.resolve('__fixtures__', filepath2), 'utf-8'));
+  const obj1 = parser(readFileSync(path.resolve('__fixtures__', filepath1), 'utf-8'));
+  const obj2 = parser(readFileSync(path.resolve('__fixtures__', filepath2), 'utf-8'));
 
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
