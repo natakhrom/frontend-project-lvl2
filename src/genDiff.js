@@ -3,33 +3,56 @@ import path from 'path';
 import _ from 'lodash';
 import parser from './parsers.js';
 
+const addPrefixToKey = (data) => {
+  if (!_.isObject(data)) {
+    return data;
+  }
+
+  const entries = Object.entries(data);
+  const diffObj = {};
+
+  entries.forEach(([key, value]) => {
+    diffObj[`  ${key}`] = addPrefixToKey(value);
+  });
+
+  return diffObj;
+};
+
 function genDiff(filepath1, filepath2) {
   const obj1 = parser(readFileSync(path.resolve('__fixtures__', filepath1), 'utf-8'));
   const obj2 = parser(readFileSync(path.resolve('__fixtures__', filepath2), 'utf-8'));
 
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const arrKeys = keys1.concat(keys2);
-  const arrSortUnicKeys = _.sortedUniq(_.sortBy(arrKeys));
-  let str = '';
+  const getDiffObj = (data1, data2) => {
+    const keys1 = Object.keys(data1);
+    const keys2 = Object.keys(data2);
+    const arrKeys = keys1.concat(keys2).sort();
+    const arrKeysUniq = _.sortedUniq(arrKeys);
+    const diffObj = {};
 
-  arrSortUnicKeys.forEach((key) => {
-    if (key in obj1 && key in obj2) {
-      if (obj1[key] === obj2[key]) {
-        str += `  ${key}: ${obj1[key]}\n`;
+    arrKeysUniq.forEach((key) => {
+      const value1 = data1[key];
+      const value2 = data2[key];
+
+      if (key in data1 && key in data2) {
+        if (_.isObject(value1) && _.isObject(value2)) {
+          diffObj[`  ${key}`] = getDiffObj(value1, value2);
+        } else if (value1 === value2) {
+          diffObj[`  ${key}`] = value1;
+        } else {
+          diffObj[`- ${key}`] = addPrefixToKey(value1);
+          diffObj[`+ ${key}`] = addPrefixToKey(value2);
+        }
+      } else if (key in data1) {
+        diffObj[`- ${key}`] = addPrefixToKey(value1);
       } else {
-        str += `- ${key}: ${obj1[key]}\n`;
-        str += `+ ${key}: ${obj2[key]}\n`;
+        diffObj[`+ ${key}`] = addPrefixToKey(value2);
       }
-    } else if (key in obj1) {
-      str += `- ${key}: ${obj1[key]}\n`;
-    } else {
-      str += `+ ${key}: ${obj2[key]}\n`;
-    }
-  });
+    });
 
-  console.log(`{\n${str}}`);
-  return `{\n${str}}`;
+    return diffObj;
+  };
+
+  return getDiffObj(obj1, obj2);
 }
 
 export default genDiff;

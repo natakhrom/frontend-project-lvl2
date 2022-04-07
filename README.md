@@ -8,8 +8,11 @@
 Проект по разработке cli-утилиты с помощью библиотеки commander.js.
 Программа сравнивает два конфигурациооных файла и выводит результат их отличий.
 
-#### Flat File Comparison (JSON)
+#### Flat file comparison (JSON)
 [![asciicast](https://asciinema.org/a/XSMXJIIDfHpdrHoq3KvIPUMK7.svg)](https://asciinema.org/a/XSMXJIIDfHpdrHoq3KvIPUMK7)
 
 #### Flat file comparison (yaml)
 [![asciicast](https://asciinema.org/a/vvxerta4QekejKVtnUPPosfeL.svg)](https://asciinema.org/a/vvxerta4QekejKVtnUPPosfeL)
+
+#### Recursive comparison
+[![asciicast](https://asciinema.org/a/e9LDo4Pih6CC8bErnjxCJNXHS.svg)](https://asciinema.org/a/e9LDo4Pih6CC8bErnjxCJNXHS)
