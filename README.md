@@ -16,3 +16,6 @@
 
 #### Recursive comparison
 [![asciicast](https://asciinema.org/a/e9LDo4Pih6CC8bErnjxCJNXHS.svg)](https://asciinema.org/a/e9LDo4Pih6CC8bErnjxCJNXHS)
+
+#### flat format
+[![asciicast](https://asciinema.org/a/ycBGFRB7iBNoBzbzTiQGylXd5.svg)](https://asciinema.org/a/ycBGFRB7iBNoBzbzTiQGylXd5)

@@ -1,7 +1,7 @@
 import path from 'path';
 import yaml from 'js-yaml';
 
-const parserFile = (file) => {
+const parseFile = (file) => {
   const extension = path.extname(file);
   let parser;
 
@@ -14,4 +14,4 @@ const parserFile = (file) => {
   return parser(file);
 };
 
-export default parserFile;
+export default parseFile;
