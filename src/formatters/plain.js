@@ -8,9 +8,10 @@ const plain = (data, parentName) => {
       } = node;
 
       const fullNameKey = parentName === undefined ? name : `${parentName}.${name}`;
-      const plainValue = _.isString(value) ? `'${value}'` : value;
-      const complexValue = _.isObject(plainValue) ? '[complex value]' : plainValue;
+      const formattedValue = _.isString(value) ? `'${value}'` : value;
+      const complexValue = _.isObject(formattedValue) ? '[complex value]' : formattedValue;
       const formattedNewValue = _.isString(newValue) ? `'${newValue}'` : newValue;
+      const complexNewValue = _.isObject(formattedNewValue) ? '[complex value]' : formattedNewValue;
 
       switch (type) {
         case 'unchanged':
@@ -19,7 +20,7 @@ const plain = (data, parentName) => {
           }
           return plain(children, fullNameKey);
         case 'updated':
-          return `Property '${fullNameKey}' was updated. From ${complexValue} to ${formattedNewValue}`;
+          return `Property '${fullNameKey}' was updated. From ${complexValue} to ${complexNewValue}`;
         case 'added':
           return `Property '${fullNameKey}' was added with value: ${complexValue}`;
         default: return `Property '${fullNameKey}' was removed`;
