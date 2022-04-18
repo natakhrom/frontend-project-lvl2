@@ -4,50 +4,48 @@ import parseFile from './parsers.js';
 import formatter from './formatters/index.js';
 
 const tree = (obj1, obj2) => {
-  const keys = _.union(_.keys(obj1), _.keys(obj2)).sort();
+  const keys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2)));
 
-  const iter = keys.flatMap((key) => {
-    const array = [];
+  const nodes = keys.map((key) => {
     const value1 = obj1[key];
     const value2 = obj2[key];
 
-    if (_.has(obj1, key) && _.has(obj2, key)) {
-      if (_.isObject(value1) && _.isObject(value2)) {
-        array.push({
-          name: key,
-          type: 'unchanged',
-          children: tree(value1, value2),
-        });
-      } else if (value1 === value2) {
-        array.push({
-          name: key,
-          type: 'unchanged',
-          value: value1,
-        });
-      } else {
-        array.push({
-          name: key,
-          type: 'updated',
-          value: value1,
-          newValue: value2,
-        });
-      }
-    } else if (_.has(obj1, key)) {
-      array.push({
+    if (key in obj1 && key in obj2 && _.isObject(value1) && _.isObject(value2)) {
+      return {
+        name: key,
+        type: 'unchanged',
+        children: tree(value1, value2),
+      };
+    }
+    if (key in obj1 && key in obj2 && value1 === value2) {
+      return {
+        name: key,
+        type: 'unchanged',
+        value: value1,
+      };
+    }
+    if (key in obj1 && key in obj2 && value1 !== value2) {
+      return {
+        name: key,
+        type: 'updated',
+        value: value1,
+        newValue: value2,
+      };
+    }
+    if (key in obj1) {
+      return {
         name: key,
         type: 'deleted',
         value: value1,
-      });
-    } else {
-      array.push({
-        name: key,
-        type: 'added',
-        value: value2,
-      });
+      };
     }
-    return array;
+    return {
+      name: key,
+      type: 'added',
+      value: value2,
+    };
   });
-  return iter;
+  return nodes;
 };
 
 function genDiff(filepath1, filepath2, formatName) {
@@ -56,5 +54,5 @@ function genDiff(filepath1, filepath2, formatName) {
 
   return formatter(tree(object1, object2), formatName);
 }
-
+genDiff('file1.json', 'file2.json');
 export default genDiff;
