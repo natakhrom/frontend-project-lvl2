@@ -3,10 +3,9 @@ import plain from './plain.js';
 
 const formatter = (data, format) => {
   switch (format) {
-    case 'stylish': return stylish(data);
     case 'plain': return plain(data);
     case 'json': return JSON.stringify(data, null, '  ');
-    default: throw new Error(`Unknown formatName: '${format}'!`);
+    default: return stylish(data);
   }
 };
 
