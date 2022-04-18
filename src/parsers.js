@@ -1,17 +1,16 @@
 import path from 'path';
 import yaml from 'js-yaml';
+import { readFileSync } from 'fs';
 
-const parseFile = (file) => {
-  const extension = path.extname(file);
-  let parser;
+const parseFile = (filePath) => {
+  const extension = path.extname(filePath);
+  const content = readFileSync(filePath, 'utf-8');
 
-  if (extension === '.yaml' || extension === '.yml') {
-    parser = yaml.load;
-  } else {
-    parser = JSON.parse;
+  switch (extension) {
+    case '.yaml': return yaml.load(content);
+    case '.yml': return yaml.load(content);
+    default: return JSON.parse(content);
   }
-
-  return parser(file);
 };
 
 export default parseFile;

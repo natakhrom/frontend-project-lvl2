@@ -1,41 +1,37 @@
 import _ from 'lodash';
 
-const plain = (data, parentProperty) => {
-  const keys = _.keys(data);
-  let str = '';
+const plain = (data, parentName) => {
+  const lines = data
+    .flatMap((node) => {
+      const {
+        name,
+        type,
+        value,
+        newValue,
+        children,
+      } = node;
 
-  keys.forEach((key, index, arrayOfKeys) => {
-    const keyWithoutPrefix = key.substring(2);
-    let value = _.isString(data[key]) ? `'${data[key]}'` : data[key];
-    if (_.isObject(value)) {
-      value = '[complex value]';
-    }
-    const previousKey = index > 0
-      ? arrayOfKeys[index - 1]
-      : undefined;
-    let previousValue = _.isString(data[previousKey]) ? `'${data[previousKey]}'` : data[previousKey];
-    if (_.isObject(previousValue)) {
-      previousValue = '[complex value]';
-    }
+      const fullNameKey = parentName === undefined ? name : `${parentName}.${name}`;
+      const formattedValue1 = _.isString(value) ? `'${value}'` : value;
+      const formattedValue2 = _.isObject(formattedValue1) ? '[complex value]' : formattedValue1;
+      const formattedNewValue = _.isString(newValue) ? `'${newValue}'` : newValue;
 
-    const path = parentProperty === undefined
-      ? keyWithoutPrefix
-      : `${parentProperty}.${keyWithoutPrefix}`;
-
-    if (key.startsWith('  ') && _.isObject(data[key])) {
-      str += `${plain(data[key], path)}`;
-    } else if (key.startsWith('- ')) {
-      str += `Property '${path}' was removed\n`;
-    } else if (key.startsWith('+ ')) {
-      if (previousKey !== undefined && keyWithoutPrefix === previousKey.substring(2)) {
-        str = str.replace(`Property '${path}' was removed\n`, `Property '${path}' was updated. From ${previousValue} to ${value}\n`);
-      } else {
-        str += `Property '${path}' was added with value: ${value}\n`;
+      switch (type) {
+        case 'unchanged':
+          if (children === undefined) {
+            return '';
+          }
+          return plain(children, fullNameKey);
+        case 'updated':
+          return `Property '${fullNameKey}' was updated. From ${formattedValue2} to ${formattedNewValue}`;
+        case 'added':
+          return `Property '${fullNameKey}' was added with value: ${formattedValue2}`;
+        default: return `Property '${fullNameKey}' was removed`;
       }
-    }
-  });
+    })
+    .filter((line) => line.trim());
 
-  return str;
+  return [...lines].join('\n');
 };
 
 export default plain;

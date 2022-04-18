@@ -1,25 +1,48 @@
 import _ from 'lodash';
 
-const stylish = (data, replacer = ' ', spacesCount = 4) => {
-  const iter = (currentValue, depth) => {
-    if (!_.isObject(currentValue)) {
-      return `${currentValue}`;
+const stringify = (data, depth = 1) => {
+  const indent = '  '.repeat(depth);
+  const bracketIndent = '  '.repeat(depth - 1);
+  if (!_.isObject(data)) {
+    return `${data}`;
+  }
+
+  const lines = Object
+    .entries(data)
+    .map(([key, value]) => `${indent}  ${key}: ${stringify(value, depth + 2)}`);
+
+  return ['{', ...lines, `${bracketIndent}}`].join('\n');
+};
+
+const stylish = (data, depth = 1) => {
+  const indent = '  '.repeat(depth);
+  const bracketIndent = '  '.repeat(depth - 1);
+
+  const lines = data.flatMap((node) => {
+    const {
+      type,
+      name,
+      children,
+      value,
+      newValue,
+    } = node;
+    switch (type) {
+      case 'unchanged':
+        if (children === undefined) {
+          return `${indent}  ${name}: ${stringify(value, depth + 2)}`;
+        }
+        return `${indent}  ${name}: ${stylish(children, depth + 2)}`;
+      case 'updated':
+        return [
+          `${indent}- ${name}: ${stringify(value, depth + 2)}`,
+          `${indent}+ ${name}: ${stringify(newValue, depth + 2)}`,
+        ];
+      case 'added':
+        return `${indent}+ ${name}: ${stringify(value, depth + 2)}`;
+      default: return `${indent}- ${name}: ${stringify(value, depth + 2)}`;
     }
-
-    const indentSize = depth * spacesCount - 2;
-    const currentIndent = replacer.repeat(indentSize);
-    const bracketIndent = replacer.repeat(indentSize - (spacesCount - 2));
-    const lines = Object
-      .entries(currentValue)
-      .map(([key, value]) => `${currentIndent}${key}: ${iter(value, depth + 1)}`);
-
-    return [
-      '{',
-      ...lines,
-      `${bracketIndent}}`,
-    ].join('\n');
-  };
-  return iter(data, 1);
+  });
+  return ['{', ...lines, `${bracketIndent}}`].join('\n');
 };
 
 export default stylish;
