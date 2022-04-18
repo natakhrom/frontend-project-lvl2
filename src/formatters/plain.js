@@ -4,16 +4,12 @@ const plain = (data, parentName) => {
   const lines = data
     .flatMap((node) => {
       const {
-        name,
-        type,
-        value,
-        newValue,
-        children,
+        name, type, value, newValue, children,
       } = node;
 
       const fullNameKey = parentName === undefined ? name : `${parentName}.${name}`;
-      const formattedValue1 = _.isString(value) ? `'${value}'` : value;
-      const formattedValue2 = _.isObject(formattedValue1) ? '[complex value]' : formattedValue1;
+      const plainValue = _.isString(value) ? `'${value}'` : value;
+      const complexValue = _.isObject(plainValue) ? '[complex value]' : plainValue;
       const formattedNewValue = _.isString(newValue) ? `'${newValue}'` : newValue;
 
       switch (type) {
@@ -23,9 +19,9 @@ const plain = (data, parentName) => {
           }
           return plain(children, fullNameKey);
         case 'updated':
-          return `Property '${fullNameKey}' was updated. From ${formattedValue2} to ${formattedNewValue}`;
+          return `Property '${fullNameKey}' was updated. From ${complexValue} to ${formattedNewValue}`;
         case 'added':
-          return `Property '${fullNameKey}' was added with value: ${formattedValue2}`;
+          return `Property '${fullNameKey}' was added with value: ${complexValue}`;
         default: return `Property '${fullNameKey}' was removed`;
       }
     })
