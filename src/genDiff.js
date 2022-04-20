@@ -1,10 +1,9 @@
 import path from 'path';
-
 import parseFile from './parsers.js';
 import formatter from './formatters/formatter.js';
 import tree from './tree.js';
 
-function genDiff(filepath1, filepath2, formatName) {
+function genDiff(filepath1, filepath2, formatName = 'stylish') {
   const object1 = parseFile(path.resolve(filepath1));
   const object2 = parseFile(path.resolve(filepath2));
 
