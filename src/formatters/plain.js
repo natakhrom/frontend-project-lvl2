@@ -14,11 +14,10 @@ const plain = (data, parentName) => {
       const complexNewValue = _.isObject(formattedNewValue) ? '[complex value]' : formattedNewValue;
 
       switch (type) {
-        case 'unchanged':
-          if (children === undefined) {
-            return '';
-          }
+        case 'internal':
           return plain(children, fullNameKey);
+        case 'unchanged':
+          return '';
         case 'updated':
           return `Property '${fullNameKey}' was updated. From ${complexValue} to ${complexNewValue}`;
         case 'added':

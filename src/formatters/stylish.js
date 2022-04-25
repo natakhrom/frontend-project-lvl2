@@ -28,11 +28,10 @@ const stylish = (data, depth = 1) => {
       type, name, children, value, newValue,
     } = node;
     switch (type) {
-      case 'unchanged':
-        if (children === undefined) {
-          return `${currentIndent}  ${name}: ${stringify(value, depth + 1)}`;
-        }
+      case 'internal':
         return `${currentIndent}  ${name}: ${stylish(children, depth + 1)}`;
+      case 'unchanged':
+        return `${currentIndent}  ${name}: ${stringify(value, depth + 1)}`;
       case 'updated':
         return [
           `${currentIndent}- ${name}: ${stringify(value, depth + 1)}`,

@@ -18,12 +18,12 @@ const expected3 = readFileSync(getFixturePath('jsonFormat.txt'), 'utf-8');
 const expected4 = readFileSync(getFixturePath('plainFormat2.txt'), 'utf-8');
 
 test.each([
-  [genDiff(filepath1, filepath2, 'stylish'), expected1],
-  [genDiff(filepath1, filepath2, 'plain'), expected2],
-  [genDiff(filepath1, filepath2, 'json'), expected3],
-  [genDiff(filepath1, filepath3, 'plain'), expected4],
-])('get difference %s', (a, expected) => {
-  expect(a).toBe(expected);
+  [filepath1, filepath2, 'stylish', expected1],
+  [filepath1, filepath2, 'plain', expected2],
+  [filepath1, filepath2, 'json', expected3],
+  [filepath1, filepath3, 'plain', expected4],
+])('get difference %s', (a, b, c, expected) => {
+  expect(genDiff(a, b, c)).toBe(expected);
 });
 
 test('Expected errors', () => {

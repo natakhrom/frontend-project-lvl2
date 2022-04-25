@@ -1,7 +1,7 @@
 [
   {
     "name": "common",
-    "type": "unchanged",
+    "type": "internal",
     "children": [
       {
         "name": "follow",
@@ -38,11 +38,11 @@
       },
       {
         "name": "setting6",
-        "type": "unchanged",
+        "type": "internal",
         "children": [
           {
             "name": "doge",
-            "type": "unchanged",
+            "type": "internal",
             "children": [
               {
                 "name": "wow",
@@ -68,7 +68,7 @@
   },
   {
     "name": "group1",
-    "type": "unchanged",
+    "type": "internal",
     "children": [
       {
         "name": "baz",

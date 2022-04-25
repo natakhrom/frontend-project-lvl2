@@ -35,7 +35,7 @@ const tree = (obj1, obj2) => {
     }
     return {
       name: key,
-      type: 'unchanged',
+      type: 'internal',
       children: tree(obj1[key], obj2[key]),
     };
   });
