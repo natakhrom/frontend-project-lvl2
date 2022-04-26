@@ -27,10 +27,6 @@ test.each([
 });
 
 test('Expected errors', () => {
-  expect(() => {
-    genDiff(filepath4, filepath2);
-  }).toThrow();
-  expect(() => {
-    genDiff(filepath1, filepath2, 'unknown');
-  }).toThrow();
+  expect(() => genDiff(filepath4, filepath2)).toThrow();
+  expect(() => genDiff(filepath1, filepath2, 'unknown')).toThrow();
 });

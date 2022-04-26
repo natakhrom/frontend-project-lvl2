@@ -30,9 +30,10 @@ const tree = (obj1, obj2) => {
         name: key,
         type: 'updated',
         value: obj1[key],
-        newValue: obj2[key],
+        updateValue: obj2[key],
       };
     }
+
     return {
       name: key,
       type: 'internal',

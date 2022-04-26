@@ -1,12 +1,19 @@
 import _ from 'lodash';
 
-const replacer = ' ';
-const spacesCount = 4;
+const getIndents = (level) => {
+  const replacer = ' ';
+  const spacesCount = 4;
 
-const stringify = (data, depth = 1) => {
-  const indent = spacesCount * depth;
+  const indent = spacesCount * level;
   const currentIndent = replacer.repeat(indent - 2);
   const bracketIndent = replacer.repeat(indent - spacesCount);
+
+  return { currentIndent, bracketIndent };
+};
+
+const stringify = (data, depth = 1) => {
+  const { currentIndent, bracketIndent } = getIndents(depth);
+
   if (!_.isObject(data)) {
     return `${data}`;
   }
@@ -19,27 +26,28 @@ const stringify = (data, depth = 1) => {
 };
 
 const stylish = (data, depth = 1) => {
-  const indent = spacesCount * depth;
-  const currentIndent = replacer.repeat(indent - 2);
-  const bracketIndent = replacer.repeat(indent - spacesCount);
+  const { currentIndent, bracketIndent } = getIndents(depth);
 
   const lines = data.flatMap((node) => {
     const {
-      type, name, children, value, newValue,
+      type, name, value,
     } = node;
     switch (type) {
       case 'internal':
-        return `${currentIndent}  ${name}: ${stylish(children, depth + 1)}`;
+        return `${currentIndent}  ${name}: ${stylish(node.children, depth + 1)}`;
       case 'unchanged':
         return `${currentIndent}  ${name}: ${stringify(value, depth + 1)}`;
       case 'updated':
         return [
           `${currentIndent}- ${name}: ${stringify(value, depth + 1)}`,
-          `${currentIndent}+ ${name}: ${stringify(newValue, depth + 1)}`,
+          `${currentIndent}+ ${name}: ${stringify(node.updateValue, depth + 1)}`,
         ];
       case 'added':
         return `${currentIndent}+ ${name}: ${stringify(value, depth + 1)}`;
-      default: return `${currentIndent}- ${name}: ${stringify(value, depth + 1)}`;
+      case 'deleted':
+        return `${currentIndent}- ${name}: ${stringify(value, depth + 1)}`;
+      default:
+        throw new Error(`Unknown type: ${type}`);
     }
   });
 

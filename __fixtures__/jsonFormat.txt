@@ -22,7 +22,7 @@
         "name": "setting3",
         "type": "updated",
         "value": true,
-        "newValue": null
+        "updateValue": null
       },
       {
         "name": "setting4",
@@ -48,7 +48,7 @@
                 "name": "wow",
                 "type": "updated",
                 "value": "",
-                "newValue": "so much"
+                "updateValue": "so much"
               }
             ]
           },
@@ -74,7 +74,7 @@
         "name": "baz",
         "type": "updated",
         "value": "bas",
-        "newValue": "bars"
+        "updateValue": "bars"
       },
       {
         "name": "foo",
@@ -87,7 +87,7 @@
         "value": {
           "key": "value"
         },
-        "newValue": "str"
+        "updateValue": "str"
       }
     ]
   },
