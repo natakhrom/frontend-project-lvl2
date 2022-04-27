@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const tree = (obj1, obj2) => {
+const getTree = (obj1, obj2) => {
   const keys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2)));
 
   const nodes = keys.map((key) => {
@@ -37,11 +37,11 @@ const tree = (obj1, obj2) => {
     return {
       name: key,
       type: 'internal',
-      children: tree(obj1[key], obj2[key]),
+      children: getTree(obj1[key], obj2[key]),
     };
   });
 
   return nodes;
 };
 
-export default tree;
+export default getTree;
